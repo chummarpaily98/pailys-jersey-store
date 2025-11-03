@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 function App() {
   const [jerseys, setJerseys] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedJersey, setSelectedJersey] = useState(null); // ✅ for modal
 
   useEffect(() => {
     // Real-time listener (auto-updates on add/delete/change)
@@ -29,71 +30,96 @@ function App() {
     <div className="App">
       {/* ===== HEADER ===== */}
       <header className="header">
-  <img src={logo} alt="Paily's Jersey Store Logo" className="main-logo" />
+        <img src={logo} alt="Paily's Jersey Store Logo" className="main-logo" />
 
-  <div className="contact-details">
-    <a
-      href="https://instagram.com/pailysjerseystore"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="contact-item"
-    >
-      <i className="fab fa-instagram"></i>
-      <span>@pailysjerseystore</span>
-    </a>
+        <div className="contact-details">
+          <a
+            href="https://instagram.com/pailysjerseystore"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-item"
+          >
+            <i className="fab fa-instagram"></i>
+            <span>@pailysjerseystore</span>
+          </a>
 
-    <a
-      href="https://wa.me/919876543210"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="contact-item"
-    >
-      <i className="fab fa-whatsapp"></i>
-      <span>+91 9947797319</span>
-    </a>
+          <a
+            href="https://wa.me/919947797319"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-item"
+          >
+            <i className="fab fa-whatsapp"></i>
+            <span>+91 99477 97319</span>
+          </a>
 
-    <a
-      href="https://reddit.com/u/pailysjerseystore"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="contact-item"
-    >
-      <i className="fab fa-reddit"></i>
-      <span>u/pailysjerseystore</span>
-    </a>
-  </div>
-</header>
+          <a
+            href="https://reddit.com/u/pailysjerseystore"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-item"
+          >
+            <i className="fab fa-reddit"></i>
+            <span>u/pailysjerseystore</span>
+          </a>
+        </div>
+      </header>
 
       {/* ===== JERSEY LIST ===== */}
       {loading ? (
-        <p style={{ textAlign: "center", marginTop: "40px" }}>Loading jerseys...</p>
+        <p style={{ textAlign: "center", marginTop: "40px" }}>
+          Loading jerseys...
+        </p>
       ) : (
         <section className="jersey-section">
           <div className="jersey-grid">
             {jerseys.map((jersey) => (
-              <div key={jersey.id} className="jersey-card">
+              <div
+                key={jersey.id}
+                className="jersey-card"
+                onClick={() => setSelectedJersey(jersey)} // 👈 opens Quick View modal
+              >
                 <img
                   src={jersey.imageUrl}
                   alt={jersey.name}
                   className="jersey-image"
                 />
-                <h3>{jersey.name}</h3>
-                <p className="price">₹{jersey.price}</p>
-                <p className="sizes">
-                  Sizes: {jersey.sizes?.join(", ") || "N/A"}
-                </p>
-                <p
-                  style={{
-                    color: jersey.stock === 0 ? "red" : "gray",
-                    fontWeight: jersey.stock === 0 ? "bold" : "normal",
-                  }}
-                >
-                  {jersey.stock === 0 ? "Out of Stock" : `Stock: ${jersey.stock}`}
-                </p>
+                <div className="jersey-info">
+                  <h3 className="jersey-name">{jersey.name}</h3>
+                  <p className="price">₹{jersey.price}</p>
+                  <p className="sizes">
+                    Sizes: {jersey.sizes?.join(", ") || "N/A"}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </section>
+      )}
+
+      {/* ===== QUICK VIEW MODAL ===== */}
+      {selectedJersey && (
+        <div
+          className="modal-overlay"
+          onClick={() => setSelectedJersey(null)} // closes when clicked outside
+        >
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()} // prevents closing when clicking inside
+          >
+            <img
+              src={selectedJersey.imageUrl}
+              alt={selectedJersey.name}
+              className="modal-image"
+            />
+            <button
+              className="close-btn"
+              onClick={() => setSelectedJersey(null)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
