@@ -598,3 +598,22 @@ body {
   color: #444;
   line-height: 1.5;
 }
+
+.load-more-container {
+  text-align: center;
+  margin: 20px 0 40px;
+}
+
+.load-more-btn {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  opacity: 0.8;
+}

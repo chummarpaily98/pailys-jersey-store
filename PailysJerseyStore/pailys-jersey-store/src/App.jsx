@@ -29,6 +29,9 @@ function App() {
     : jerseys.length;
   const [showSearch, setShowSearch] = useState(false);
   const [openSection, setOpenSection] = useState(null);
+  const [itemsPerPage] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(10);
+
 
 
 
@@ -51,6 +54,14 @@ function App() {
         : [...prev, team]
     );
   };
+  const loadMore = () => {
+    setVisibleCount(prev => prev + itemsPerPage);
+  };
+  const activeList =
+    filteredJerseys.length > 0 || filtersActive || searchText.trim() !== ""
+      ? filteredJerseys
+      : jerseys;
+
 
 
 
@@ -103,6 +114,10 @@ function App() {
 
     setFilteredJerseys(results);
   }, [searchText, jerseys]);
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [filteredJerseys, searchText]);
 
 
 
@@ -325,7 +340,8 @@ function App() {
 
 
           <div className="jersey-grid">
-            {(filteredJerseys.length > 0 ? filteredJerseys : jerseys).map((jersey) => (
+            {activeList.slice(0, visibleCount).map((jersey) => (
+
               <div
                 key={jersey.id}
                 className="jersey-card"
@@ -346,6 +362,14 @@ function App() {
               </div>
             ))}
           </div>
+          {activeList.length > visibleCount && (
+            <div className="load-more-container">
+              <button className="load-more-btn" onClick={loadMore}>
+                SHOOT
+              </button>
+            </div>
+          )}
+
           {/* ===== BOTTOM INFO ACCORDION ===== */}
           <div className="bottom-info">
 
