@@ -6,10 +6,50 @@ import "./index.css";
 import logo from "./assets/logo.png";
 import { Link } from "react-router-dom";
 
+
 function App() {
   const [jerseys, setJerseys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedJersey, setSelectedJersey] = useState(null); // ✅ for modal
+  const [showFilter, setShowFilter] = useState(false);
+  const [availableSizes, setAvailableSizes] = useState([]);
+  const [availableTeams, setAvailableTeams] = useState([]);
+
+  const [showSizePanel, setShowSizePanel] = useState(false);
+  const [showTeamPanel, setShowTeamPanel] = useState(false);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedTeams, setSelectedTeams] = useState([]);
+  const [filteredJerseys, setFilteredJerseys] = useState([]);
+  const filtersActive =
+    selectedSizes.length > 0 ||
+    selectedTeams.length > 0;
+  const displayCount = filtersActive
+    ? filteredJerseys.length
+    : jerseys.length;
+
+
+  // ===================
+  // STEP 2 — Toggle selection helpers
+  // ===================
+  const toggleSize = (size) => {
+    setSelectedSizes(prev =>
+      prev.includes(size)
+        ? prev.filter(s => s !== size)
+        : [...prev, size]
+    );
+  };
+
+  const toggleTeam = (team) => {
+    setSelectedTeams(prev =>
+      prev.includes(team)
+        ? prev.filter(t => t !== team)
+        : [...prev, team]
+    );
+  };
+
+
+
+
 
   useEffect(() => {
     // Real-time listener (auto-updates on add/delete/change)
@@ -25,6 +65,25 @@ function App() {
     // Cleanup listener on unmount
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!jerseys || jerseys.length === 0) return;
+
+    // get unique sizes from all jerseys
+    const sizes = new Set();
+    jerseys.forEach(j => {
+      if (j.sizes) {
+        j.sizes.forEach(size => sizes.add(size));
+      }
+    });
+
+    // get unique teams
+    const teams = new Set(jerseys.map(j => j.name));
+
+    setAvailableSizes([...sizes]);
+    setAvailableTeams([...teams]);
+  }, [jerseys]);
+
 
   return (
     <div className="App">
@@ -72,8 +131,145 @@ function App() {
         </p>
       ) : (
         <section className="jersey-section">
+
+
+          <div className="products-header">
+            <div className="product-count">{displayCount} Jerseys</div>
+            <button className="filter-btn" onClick={() => setShowFilter(true)}>
+              <i className="fa-solid fa-sliders"></i>
+            </button>
+          </div>
+
+          {showFilter && (
+            <div className="filter-overlay">
+              <div className="filter-panel">
+
+                <div className="filter-panel-header">
+                  <span>FILTER</span>
+                  <button className="close-filter" onClick={() => setShowFilter(false)}>×</button>
+                </div>
+
+                <div className="filter-options">
+                  <div className="filter-row" onClick={() => setShowSizePanel(true)}>
+                    <span>Size</span>
+                    <span className="arrow">›</span>
+                  </div>
+
+                  <div className="filter-row" onClick={() => setShowTeamPanel(true)}>
+                    <span>Team</span>
+                    <span className="arrow">›</span>
+                  </div>
+
+                </div>
+
+                <div className="filter-footer">
+                  <button
+                    className="clear-btn"
+                    onClick={() => {
+                      setSelectedSizes([]);
+                      setSelectedTeams([]);
+                      setFilteredJerseys([]);
+                    }}
+                  >
+                    CLEAR
+                  </button>
+
+                  <button
+                    className="view-btn"
+                    onClick={() => {
+
+                      let results = jerseys;
+
+                      // Filter by sizes (multi-select)
+                      if (selectedSizes.length > 0) {
+                        results = results.filter(j =>
+                          j.sizes?.some(size => selectedSizes.includes(size))
+                        );
+                      }
+
+                      // Filter by teams (multi-select)
+                      if (selectedTeams.length > 0) {
+                        results = results.filter(j =>
+                          selectedTeams.includes(j.name)
+                        );
+                      }
+
+                      setFilteredJerseys(results);
+                      setShowFilter(false);
+                      setShowSizePanel(false);
+                      setShowTeamPanel(false);
+                    }}
+                  >
+                    APPLY
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+          )}
+          {showSizePanel && (
+            <div className="filter-overlay">
+              <div className="filter-panel">
+
+                <div className="filter-panel-header">
+                  <button className="back-btn" onClick={() => setShowSizePanel(false)}>←</button>
+                  <span>SIZE</span>
+                  <button className="close-filter" onClick={() => setShowSizePanel(false)}>×</button>
+                </div>
+
+                <div className="filter-options">
+
+                  {availableSizes.map(size => (
+                    <label key={size} className="checkbox-row">
+                      <input
+                        type="checkbox"
+                        checked={selectedSizes.includes(size)}
+                        onChange={() => toggleSize(size)}
+                      />
+                      <span className="label-text">{size}</span>
+                    </label>
+                  ))}
+
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {showTeamPanel && (
+            <div className="filter-overlay">
+              <div className="filter-panel">
+
+                <div className="filter-panel-header">
+                  <button className="back-btn" onClick={() => setShowTeamPanel(false)}>←</button>
+                  <span>TEAM</span>
+                  <button className="close-filter" onClick={() => setShowTeamPanel(false)}>×</button>
+                </div>
+
+                <div className="filter-options">
+
+                  {availableTeams.map(team => (
+                    <label key={team} className="checkbox-row">
+                      <input
+                        type="checkbox"
+                        checked={selectedTeams.includes(team)}
+                        onChange={() => toggleTeam(team)}
+                      />
+                      <span className="label-text">{team}</span>
+                    </label>
+                  ))}
+
+                </div>
+
+              </div>
+            </div>
+          )}
+
+
+
           <div className="jersey-grid">
-            {jerseys.map((jersey) => (
+            {(filteredJerseys.length > 0 ? filteredJerseys : jerseys).map((jersey) => (
               <div
                 key={jersey.id}
                 className="jersey-card"
