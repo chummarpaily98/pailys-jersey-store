@@ -20,12 +20,17 @@ function App() {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [filteredJerseys, setFilteredJerseys] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const filtersActive =
     selectedSizes.length > 0 ||
     selectedTeams.length > 0;
   const displayCount = filtersActive
     ? filteredJerseys.length
     : jerseys.length;
+  const [showSearch, setShowSearch] = useState(false);
+  const [openSection, setOpenSection] = useState(null);
+
+
 
 
   // ===================
@@ -84,6 +89,22 @@ function App() {
     setAvailableTeams([...teams]);
   }, [jerseys]);
 
+  useEffect(() => {
+    if (searchText.trim() === "") {
+      setFilteredJerseys([]);
+      return;
+    }
+
+    const text = searchText.toLowerCase();
+
+    const results = jerseys.filter(j =>
+      j.name.toLowerCase().includes(text)
+    );
+
+    setFilteredJerseys(results);
+  }, [searchText, jerseys]);
+
+
 
   return (
     <div className="App">
@@ -134,10 +155,36 @@ function App() {
 
 
           <div className="products-header">
-            <div className="product-count">{displayCount} Jerseys</div>
-            <button className="filter-btn" onClick={() => setShowFilter(true)}>
-              <i className="fa-solid fa-sliders"></i>
-            </button>
+            {!showSearch ? (
+              <>
+                <div className="product-count">{displayCount} Jerseys</div>
+
+                <div className="header-icons">
+                  <button className="search-btn" onClick={() => setShowSearch(true)}>
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                  </button>
+
+                  <button className="filter-btn" onClick={() => setShowFilter(true)}>
+                    <i className="fa-solid fa-sliders"></i>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="search-bar">
+
+                <i className="fa-solid fa-magnifying-glass search-icon"></i>
+
+                <input
+                  type="text"
+                  className="search-input-bar"
+                  placeholder="Search"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+
+                <button className="search-close-btn" onClick={() => setShowSearch(false)}>×</button>
+              </div>
+            )}
           </div>
 
           {showFilter && (
@@ -180,17 +227,25 @@ function App() {
 
                       let results = jerseys;
 
-                      // Filter by sizes (multi-select)
+                      // FILTER BY SIZE
                       if (selectedSizes.length > 0) {
                         results = results.filter(j =>
                           j.sizes?.some(size => selectedSizes.includes(size))
                         );
                       }
 
-                      // Filter by teams (multi-select)
+                      // FILTER BY TEAM
                       if (selectedTeams.length > 0) {
                         results = results.filter(j =>
                           selectedTeams.includes(j.name)
+                        );
+                      }
+
+                      // ⭐ FILTER BY SEARCH TEXT (Step 4)
+                      if (searchText.trim() !== "") {
+                        const text = searchText.toLowerCase();
+                        results = results.filter(j =>
+                          j.name.toLowerCase().includes(text)
                         );
                       }
 
@@ -202,6 +257,7 @@ function App() {
                   >
                     APPLY
                   </button>
+
 
                 </div>
 
@@ -290,6 +346,40 @@ function App() {
               </div>
             ))}
           </div>
+          {/* ===== BOTTOM INFO ACCORDION ===== */}
+          <div className="bottom-info">
+
+            {[
+              { id: "delivery", title: "DELIVERY", content: "..." },
+              { id: "payments", title: "PAYMENTS", content: "..." },
+              { id: "returns", title: "RETURNS & REFUNDS", content: "..." },
+              { id: "productsize", title: "PRODUCT & SIZE", content: "..." },
+              { id: "washcare", title: "WASH CARE", content: "..." },
+            ].map((item) => (
+              <div key={item.id} className="info-section">
+
+                <div
+                  className="info-item"
+                  onClick={() =>
+                    setOpenSection(openSection === item.id ? null : item.id)
+                  }
+                >
+                  {item.title}
+
+                  <span className="arrow">
+                    {openSection === item.id ? "−" : "+"}
+                  </span>
+                </div>
+
+                {openSection === item.id && (
+                  <div className="info-content">{item.content}</div>
+                )}
+
+              </div>
+            ))}
+
+          </div>
+
         </section>
       )}
 

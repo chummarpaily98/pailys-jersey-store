@@ -137,7 +137,7 @@ body {
   /* remove old padding */
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
-  color: #333;
+  color: #020202;
   margin-left: -10px;
   /* adjust left movement */
 }
@@ -488,4 +488,113 @@ body {
 .label-text {
   font-size: 1rem;
   color: #111;
+}
+
+
+.header-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-btn,
+.filter-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.search-panel {
+  background: white;
+  padding: 10px 16px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.search-icon {
+  font-size: 18px;
+  color: #333;
+  margin-right: 10px;
+}
+
+/* Borderless input */
+.search-input-bar {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 8px 0;
+}
+
+/* Close button (fixed!) */
+.close-search {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Underline */
+.search-underline {
+  height: 1px;
+  width: 100%;
+  background: #aaa;
+  margin-top: 8px;
+}
+
+.search-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.bottom-info {
+  padding: 25px 20px;
+  border-top: 0.5px solid black;
+  margin-top: 40px;
+  background: #fff;
+}
+
+.info-section {
+  margin-bottom: 10px;
+}
+
+.info-item {
+  font-size: 1rem;
+  color: #000;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.info-content {
+  padding: 12px 0 18px 0;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
 }
