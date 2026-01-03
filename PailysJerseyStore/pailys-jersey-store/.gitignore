@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Local folders
+JerseyPicsSorted/
+
+# VS Code workspace files
+*.code-workspace
+

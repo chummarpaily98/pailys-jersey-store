@@ -37,11 +37,23 @@ root.render(
 );
 
 /* ================= SPLASH HIDE LOGIC ================= */
-/* Runs AFTER React is mounted */
-setTimeout(() => {
+const MIN_SPLASH_TIME = 1000; // 1 second
+
+const splashStartTime = performance.now();
+
+const hideSplash = () => {
   const splash = document.getElementById("splash-screen");
-  if (splash) {
-    splash.classList.add("hide-splash");
-    setTimeout(() => splash.remove(), 500);
-  }
-}, 300);
+  if (!splash) return;
+
+  splash.classList.add("hide-splash");
+  setTimeout(() => splash.remove(), 400); // match CSS fadeOut
+};
+
+// Ensure splash stays for at least 1 second
+requestAnimationFrame(() => {
+  const elapsed = performance.now() - splashStartTime;
+  const remaining = Math.max(0, MIN_SPLASH_TIME - elapsed);
+
+  setTimeout(hideSplash, remaining);
+});
+
