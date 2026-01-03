@@ -5,26 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paily's Jersey Store</title>
 
-    <!-- ✅ Font Awesome (clean, safe version for Vite) -->
+    <!-- ✅ Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
 
     <!-- ✅ Favicon -->
-    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
 
-    <!-- ✅ Meta tags for SEO -->
+    <!-- ✅ SEO -->
     <meta
       name="description"
       content="Paily's Jersey Store — Premium football jerseys at the best prices. Available in all sizes."
     />
+
+    <!-- ================= SPLASH SCREEN STYLES ================= -->
+    <style>
+      #splash-screen {
+        position: fixed;
+        inset: 0;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+
+      #splash-logo {
+        width: 200px;
+        animation: zoom3d 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        transform-origin: center;
+      }
+
+      @keyframes zoom3d {
+        0% {
+          transform: perspective(900px) scale(0.35) rotateX(20deg);
+          opacity: 0;
+        }
+        60% {
+          opacity: 1;
+        }
+        100% {
+          transform: perspective(900px) scale(1.05) rotateX(0deg);
+          opacity: 1;
+        }
+      }
+
+      .hide-splash {
+        animation: fadeOut 0.4s ease forwards;
+        pointer-events: none;
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+    </style>
   </head>
 
   <body>
+    <!-- ================= SPLASH SCREEN ================= -->
+    <div id="splash-screen">
+      <img id="splash-logo" src="/logo.png" alt="Paily's Jersey Store" />
+    </div>
+
+    <!-- ================= REACT ROOT (THIS WAS MISSING) ================= -->
     <div id="root"></div>
 
-    <!-- ✅ React/Vite entry point -->
+    <!-- ================= VITE ENTRY (THIS WAS MISSING) ================= -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

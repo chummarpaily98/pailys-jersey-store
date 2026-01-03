@@ -10,7 +10,9 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import "./output.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
@@ -33,3 +35,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+/* ================= SPLASH HIDE LOGIC ================= */
+/* Runs AFTER React is mounted */
+setTimeout(() => {
+  const splash = document.getElementById("splash-screen");
+  if (splash) {
+    splash.classList.add("hide-splash");
+    setTimeout(() => splash.remove(), 500);
+  }
+}, 300);
