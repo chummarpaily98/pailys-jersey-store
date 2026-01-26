@@ -397,9 +397,6 @@ function App() {
                         <tr><td>M</td><td>39–40</td><td>28.7</td><td>15.0</td></tr>
                         <tr><td>L</td><td>41–42</td><td>29.5</td><td>15.6</td></tr>
                         <tr><td>XL</td><td>43–44</td><td>30.3</td><td>16.1</td></tr>
-                        <tr><td>2XL</td><td>45–46</td><td>31.9</td><td>16.5</td></tr>
-                        <tr><td>3XL</td><td>47–48</td><td>32.7</td><td>16.9</td></tr>
-                        <tr><td>4XL</td><td>49–50</td><td>33.5</td><td>17.3</td></tr>
                       </tbody>
                     </table>
 
@@ -423,7 +420,6 @@ function App() {
                         <tr><td>M</td><td>37–38</td><td>28.3</td><td>16.5</td><td>9.8</td></tr>
                         <tr><td>L</td><td>39–40</td><td>29.1</td><td>17.0</td><td>10.1</td></tr>
                         <tr><td>XL</td><td>40–42</td><td>29.9</td><td>17.6</td><td>10.4</td></tr>
-                        <tr><td>2XL</td><td>42–43</td><td>30.7</td><td>18.1</td><td>10.7</td></tr>
                       </tbody>
                     </table>
                   </div>
