@@ -1,1 +1,37 @@
-/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
+.care-lines {
+  margin-top: 8px;
+}
+
+.care-lines p {
+  font-size: 0.95rem;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.about-us {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #444;
+  max-width: 680px;
+}
+.returns-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.delivery-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.payments-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 10px;
+}

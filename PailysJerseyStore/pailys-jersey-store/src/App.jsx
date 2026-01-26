@@ -374,11 +374,131 @@ function App() {
           <div className="bottom-info">
 
             {[
-              { id: "delivery", title: "DELIVERY", content: "..." },
-              { id: "payments", title: "PAYMENTS", content: "..." },
-              { id: "returns", title: "RETURNS & REFUNDS", content: "..." },
-              { id: "productsize", title: "PRODUCT & SIZE", content: "..." },
-              { id: "washcare", title: "WASH CARE", content: "..." },
+              { id: "size", title: "SIZE CHART", content: "Select your usual size" },
+              {
+                id: "payments",
+                title: "PAYMENTS",
+                content: (
+                  <div className="payments-content">
+                    <p>
+                      All payments must be completed at the time of purchase.
+                    </p>
+
+                    <p>
+                      Orders are processed only after the payment is successfully received,
+                      after which we’ll start preparing your jersey for dispatch.
+                    </p>
+                  </div>
+                )
+              },
+
+              {
+                id: "delivery",
+                title: "DELIVERY",
+                content: (
+                  <div className="delivery-content">
+                    <p>
+                      We ship all orders using trusted courier partners to make sure your
+                      jerseys reach you safely.
+                    </p>
+
+                    <p>
+                      Shipping charges may vary depending on your location and the size of the
+                      order.
+                    </p>
+
+                    <p>
+                      Most orders are delivered within <strong>4–8 working days</strong>.
+                      Occasionally, delays may happen due to holidays, courier issues, or
+                      unforeseen circumstances.
+                    </p>
+
+                    <p>
+                      Once your order is shipped, tracking details will be shared with you on
+                      <strong> Instagram or WhatsApp</strong>, so you can follow your order
+                      easily 🙂
+                    </p>
+                  </div>
+                )
+              },
+
+              {
+                id: "returns",
+                title: "RETURNS & REFUNDS",
+                content: (
+                  <div className="returns-content">
+                    <p>
+                      We don’t offer refunds, as all sales are final. That said, if you receive
+                      a <strong>defective or incorrect product</strong>, we’ll definitely help
+                      you out.
+                    </p>
+
+                    <p>
+                      Before packing every order, we carefully check the jersey to make sure
+                      there are no defects. To avoid any confusion, we recommend recording a
+                      short video while opening the package — this helps us resolve issues
+                      faster if needed.
+                    </p>
+
+                    <p>
+                      Any refund-related concern must be raised within <strong>48 hours </strong>
+                      of receiving your order.
+                    </p>
+
+                    <p>
+                      Refunds are not applicable for customized products, pre-ordered items,
+                      or sale/clearance products.
+                    </p>
+
+                    <p>
+                      Once an order is processed, it cannot be cancelled.
+                    </p>
+
+                    <p>
+                      Exchanges are accepted only if requested within <strong>48 hours </strong>
+                      of delivery. Items must be unused, in original condition, and with all
+                      packaging intact. Shipping charges may apply.
+                    </p>
+
+                    <p>
+                      Customized and pre-ordered products are not eligible for exchange.
+                    </p>
+
+                    <p>
+                      To request an exchange, simply contact us on <strong>WhatsApp or Instagram </strong>
+                      with your order details and reason, and we’ll take it from there 🙂
+                    </p>
+                  </div>
+                )
+              },
+
+              {
+                id: "washcare",
+                title: "WASH CARE",
+                content: (
+                  <div className="care-lines">
+                    <p>Machine wash cold and wash separately</p>
+                    <p>
+                      Turn the jersey <strong>inside out</strong> before washing and ironing
+                    </p>
+                    <p>Remove immediately after washing</p>
+                    <p>Avoid bleach and fabric softeners</p>
+                    <p>Do not tumble dry or dry clean</p>
+                    <p>Iron on low heat using a cloth in between</p>
+                  </div>
+                )
+              },
+              {
+                id: "aboutus",
+                title: "ABOUT US",
+                content: (
+                  <p className="about-us">
+                    Paily’s Jersey Store was born from a lifelong love for football. Growing up as a fan, wearing the jersey of a favourite team or player was never just about the game — it was about confidence, identity, and belonging. A jersey isn’t just fabric; it carries memories, emotions, and pride.
+                    <br /><br />
+                    As the football community in India continues to grow stronger, Paily’s Jersey Store exists to make quality jerseys accessible to fans who truly live the sport. Built for matchdays, streetwear, and everyday confidence — this store is for fans who wear their passion with pride.
+                  </p>
+                )
+              }
             ].map((item) => (
               <div key={item.id} className="info-section">
 
