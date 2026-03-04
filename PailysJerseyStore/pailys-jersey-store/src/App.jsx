@@ -1,15 +1,22 @@
 // src/App.jsx
 import React, { useEffect, useState } from "react";
 import { db } from "./firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import "./index.css";
 import logo from "./assets/logo.png";
 import { Link } from "react-router-dom";
 
 
 function App() {
+
   const [jerseys, setJerseys] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // helper function
+  const hasAvailableSizes = (sizes) => {
+    if (!sizes) return false;
+    return Object.values(sizes).some(qty => qty > 0);
+  };
   const [selectedJersey, setSelectedJersey] = useState(null); // ✅ for modal
   const [showFilter, setShowFilter] = useState(false);
   const [availableSizes, setAvailableSizes] = useState([]);
@@ -68,36 +75,54 @@ function App() {
 
 
   useEffect(() => {
-    // Real-time listener (auto-updates on add/delete/change)
-    const unsubscribe = onSnapshot(collection(db, "jerseys"), (snapshot) => {
+
+    const jerseysQuery = query(
+      collection(db, "jerseys"),
+      where("isActive", "==", true),
+      where("totalStock", ">", 0)
+    );
+
+    const unsubscribe = onSnapshot(jerseysQuery, (snapshot) => {
+
       const jerseyList = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+
       setJerseys(jerseyList);
       setLoading(false);
+
     });
 
-    // Cleanup listener on unmount
     return () => unsubscribe();
+
   }, []);
 
   useEffect(() => {
+
     if (!jerseys || jerseys.length === 0) return;
 
-    // get unique sizes from all jerseys
     const sizes = new Set();
+
     jerseys.forEach(j => {
-      if (j.sizes) {
-        j.sizes.forEach(size => sizes.add(size));
-      }
+
+      if (!j.sizes) return;
+
+      Object.entries(j.sizes).forEach(([size, qty]) => {
+
+        if (qty > 0) {
+          sizes.add(size);
+        }
+
+      });
+
     });
 
-    // get unique teams
-    const teams = new Set(jerseys.map(j => j.name));
+    const teams = new Set(jerseys.map(j => j.team));
 
     setAvailableSizes([...sizes]);
     setAvailableTeams([...teams]);
+
   }, [jerseys]);
 
   useEffect(() => {
@@ -245,7 +270,9 @@ function App() {
                       // FILTER BY SIZE
                       if (selectedSizes.length > 0) {
                         results = results.filter(j =>
-                          j.sizes?.some(size => selectedSizes.includes(size))
+                          Object.entries(j.sizes || {}).some(
+                            ([size, qty]) => selectedSizes.includes(size) && qty > 0
+                          )
                         );
                       }
 
@@ -340,27 +367,35 @@ function App() {
 
 
           <div className="jersey-grid">
-            {activeList.slice(0, visibleCount).map((jersey) => (
+            {activeList
+              .filter(jersey => hasAvailableSizes(jersey.sizes))
+              .slice(0, visibleCount)
+              .map((jersey) => (
 
-              <div
-                key={jersey.id}
-                className="jersey-card"
-                onClick={() => setSelectedJersey(jersey)} // 👈 opens Quick View modal
-              >
-                <img
-                  src={jersey.imageUrl}
-                  alt={jersey.name}
-                  className="jersey-image"
-                />
-                <div className="jersey-info">
-                  <h3 className="jersey-name">{jersey.name}</h3>
-                  <p className="price">₹{jersey.price}</p>
-                  <p className="sizes">
-                    Sizes: {jersey.sizes?.join(", ") || "N/A"}
-                  </p>
+                <div
+                  key={jersey.id}
+                  className="jersey-card"
+                  onClick={() => setSelectedJersey(jersey)} // 👈 opens Quick View modal
+                >
+                  <img
+                    src={jersey.images?.[0]}
+                    alt={jersey.name}
+                    className="jersey-image"
+                  />
+                  <div className="jersey-info">
+                    <h3 className="jersey-name">{jersey.name}</h3>
+                    <p className="price">₹{jersey.price}</p>
+                    <p className="sizes">
+                      Sizes: {
+                        Object.entries(jersey.sizes || {})
+                          .filter(([size, qty]) => qty > 0)
+                          .map(([size]) => size)
+                          .join(", ") || "Out of stock"
+                      }
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
           {activeList.length > visibleCount && (
             <div className="load-more-container">

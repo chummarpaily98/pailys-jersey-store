@@ -18,8 +18,21 @@ export default function UploadJersey() {
   /* ---------------- SINGLE UPLOAD STATES ---------------- */
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
   const [image, setImage] = useState(null);
+  const [category, setCategory] = useState("");
+  const [league, setLeague] = useState("");
+  const [team, setTeam] = useState("");
+  const [season, setSeason] = useState("");
+  const [version, setVersion] = useState("");
+  const [sleeve, setSleeve] = useState("");
+  const [description, setDescription] = useState("");
+  const [sizes, setSizes] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+    XL: 0,
+    XXL: 0
+  });
   const [singleProgress, setSingleProgress] = useState(0);
   const [singleMessage, setSingleMessage] = useState("");
 
@@ -71,12 +84,33 @@ export default function UploadJersey() {
       async () => {
         const imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
 
+        const sizeObj = sizes;
+
+        const totalStock = Object.values(sizeObj).reduce(
+          (a, b) => a + b,
+          0
+        );
+
         await addDoc(collection(db, "jerseys"), {
           name,
           price: Number(price),
-          stock: Number(stock),
-          sizes: [],
-          imageUrl,
+
+          category,
+          league,
+          team,
+          sport: "football",
+          season,
+          version,
+          sleeve,
+
+          sizes: sizeObj,
+          totalStock,
+
+          images: [imageUrl],
+
+          description,
+          isActive: true,
+
           createdAt: new Date(),
         });
 
@@ -185,17 +219,42 @@ export default function UploadJersey() {
     updateCard(cardIndex, "Saving jersey to database…", 80);
 
     try {
-      const sizes = String(row.sizes || row.Sizes || "")
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
+
+      // Build dynamic size map
+      const sizeObj = {};
+
+      Object.keys(row).forEach((key) => {
+        const value = Number(row[key]);
+
+        // Any numeric column except price will be treated as size
+        if (!isNaN(value) && key.toLowerCase() !== "price" && value > 0) {
+          sizeObj[key.trim()] = value;
+        }
+      });
+
+      // Calculate total stock automatically
+      const totalStock = Object.values(sizeObj).reduce((a, b) => a + b, 0);
 
       await addDoc(collection(db, "jerseys"), {
         name: row.name || row.Name,
         price: Number(row.price || row.Price || 0),
-        stock: Number(row.stock || row.Stock || 0),
-        sizes,
-        imageUrl: downloadURL,
+
+        category: row.category || row.Category || "",
+        league: row.league || row.League || "",
+        team: row.team || row.Team || "",
+        sport: "football",
+        season: row.season || row.Season || "",
+        version: row.version || row.Version || "",
+        sleeve: row.sleeve || row.Sleeve || "",
+
+        sizes: sizeObj,
+        totalStock,
+
+        images: [downloadURL],
+
+        description: row.description || row.Description || "",
+        isActive: true,
+
         createdAt: new Date(),
       });
 
@@ -207,6 +266,7 @@ export default function UploadJersey() {
         uploadedImageUrl: downloadURL,
         errorMessage: "",
       };
+
     } catch (err) {
       /* ROLLBACK → delete uploaded image */
       if (imageRef) await deleteObject(imageRef);
@@ -315,6 +375,7 @@ export default function UploadJersey() {
           style={input}
           required
         />
+
         <input
           placeholder="Price"
           type="number"
@@ -323,13 +384,47 @@ export default function UploadJersey() {
           style={input}
           required
         />
+
         <input
-          placeholder="Stock"
-          type="number"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
+          placeholder="Category (example: serie-a)"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
           style={input}
-          required
+        />
+
+        <input
+          placeholder="League"
+          value={league}
+          onChange={(e) => setLeague(e.target.value)}
+          style={input}
+        />
+
+        <input
+          placeholder="Team"
+          value={team}
+          onChange={(e) => setTeam(e.target.value)}
+          style={input}
+        />
+
+        <input
+          placeholder="Season (example: 2024)"
+          value={season}
+          onChange={(e) => setSeason(e.target.value)}
+          style={input}
+        />
+
+        <input
+          placeholder="Version (fan/player)"
+          value={version}
+          onChange={(e) => setVersion(e.target.value)}
+          style={input}
+        />
+
+        <input
+          placeholder="Sleeve (short/long)"
+          value={sleeve}
+          onChange={(e) => setSleeve(e.target.value)}
+          style={input}
         />
 
         <input
@@ -338,6 +433,35 @@ export default function UploadJersey() {
           onChange={(e) => setImage(e.target.files[0])}
           style={input}
           required
+        />
+        <h4>Sizes</h4>
+
+        {Object.keys(sizes).map(size => (
+          <div key={size} style={{ marginBottom: "8px" }}>
+            <label style={{ marginRight: "10px", fontWeight: "bold" }}>
+              {size}
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              value={sizes[size]}
+              onChange={(e) =>
+                setSizes({
+                  ...sizes,
+                  [size]: e.target.value === "" ? "" : Number(e.target.value)
+                })
+              }
+              style={input}
+            />
+          </div>
+        ))}
+
+        <textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          style={input}
         />
 
         <button style={button}>Upload</button>

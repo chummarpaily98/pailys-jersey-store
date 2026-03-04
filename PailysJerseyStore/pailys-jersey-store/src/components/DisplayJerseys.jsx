@@ -43,7 +43,7 @@ const DisplayJerseys = () => {
           }}
         >
           <img
-            src={jersey.imageUrl}
+            src={jersey.images?.[0]}
             alt={jersey.name}
             style={{
               width: "100%",
@@ -52,7 +52,17 @@ const DisplayJerseys = () => {
               borderRadius: "10px",
               marginBottom: "10px",
             }}
+            loading="lazy"
           />
+
+          <p>
+            Sizes: {
+              Object.entries(jersey.sizes || {})
+                .filter(([size, qty]) => qty > 0)
+                .map(([size]) => size)
+                .join(", ")
+            }
+          </p>
           <h3>{jersey.name}</h3>
           <p>₹{jersey.price}</p>
           <p
@@ -70,4 +80,3 @@ const DisplayJerseys = () => {
 };
 
 export default DisplayJerseys;
-    
