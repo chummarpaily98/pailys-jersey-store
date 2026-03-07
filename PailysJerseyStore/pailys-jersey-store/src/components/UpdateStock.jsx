@@ -37,12 +37,22 @@ const UpdateStock = () => {
 
         if (newQty < 0) return;
 
-        const newTotalStock = jersey.totalStock + change;
+        const currentSold = jersey.sold?.[size] || 0;
 
-        await updateDoc(doc(db, "jerseys", jersey.id), {
+        let updates = {
             [`sizes.${size}`]: newQty,
-            totalStock: newTotalStock
-        });
+            totalStock: jersey.totalStock + change
+        };
+
+        // If selling jersey (clicking -)
+        if (change === -1) {
+
+            updates[`sold.${size}`] = currentSold + 1;
+            updates["totalSold"] = (jersey.totalSold || 0) + 1;
+
+        }
+
+        await updateDoc(doc(db, "jerseys", jersey.id), updates);
 
     };
 
@@ -87,7 +97,10 @@ const UpdateStock = () => {
 
                     {filtered.map(jersey => (
 
-                        <tr key={jersey.id}>
+                        <tr
+                            key={jersey.id}
+                            className={jersey.totalStock <= 2 ? "low-stock-row" : ""}
+                        >
 
                             <td className="jersey-name-cell">
                                 {jersey.name}

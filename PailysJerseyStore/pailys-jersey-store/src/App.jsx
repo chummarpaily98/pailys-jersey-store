@@ -222,7 +222,15 @@ function App() {
                   onChange={(e) => setSearchText(e.target.value)}
                 />
 
-                <button className="search-close-btn" onClick={() => setShowSearch(false)}>×</button>
+                <button
+                  className="search-close-btn"
+                  onClick={() => {
+                    setShowSearch(false);
+                    setSearchText("");
+                  }}
+                >
+                  ×
+                </button>
               </div>
             )}
           </div>

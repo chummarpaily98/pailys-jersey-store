@@ -17,15 +17,15 @@ import { saveAs } from "file-saver";
 export default function UploadJersey() {
   /* ---------------- SINGLE UPLOAD STATES ---------------- */
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [offerPrice, setOfferPrice] = useState("");
+  const [price, setPrice] = useState(899);
+  const [offerPrice, setOfferPrice] = useState(799);
   const [image, setImage] = useState(null);
-  const [category, setCategory] = useState("");
+  const [sport, setSport] = useState("football");
   const [league, setLeague] = useState("");
   const [team, setTeam] = useState("");
-  const [season, setSeason] = useState("");
-  const [version, setVersion] = useState("");
-  const [sleeve, setSleeve] = useState("");
+  const [season, setSeason] = useState("25/26");
+  const [version, setVersion] = useState("fan");
+  const [sleeve, setSleeve] = useState("half");
   const [description, setDescription] = useState("");
   const [sizes, setSizes] = useState({
     S: 0,
@@ -96,15 +96,24 @@ export default function UploadJersey() {
           name,
           price: Number(price),
           offerPrice: offerPrice ? Number(offerPrice) : null,
-          category,
           league,
           team,
-          sport: "football",
+          sport,
           season,
           version,
           sleeve,
 
           sizes: sizeObj,
+          // initialize sales tracking
+          sold: {
+            S: 0,
+            M: 0,
+            L: 0,
+            XL: 0,
+            XXL: 0
+          },
+
+          totalSold: 0,
           totalStock,
 
           images: [imageUrl],
@@ -378,29 +387,35 @@ export default function UploadJersey() {
           required
         />
 
-        <input
-          placeholder="Price"
-          type="number"
+        <select
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           style={input}
-          required
-        />
+        >
+          <option value="899">899</option>
+          <option value="999">999</option>
+          <option value="1099">1099</option>
+          <option value="1199">1199</option>
+          <option value="1499">1499</option>
+        </select>
 
-        <input
-          placeholder="Offer Price (optional)"
-          type="number"
+        <select
           value={offerPrice}
           onChange={(e) => setOfferPrice(e.target.value)}
           style={input}
-        />
-
-        <input
-          placeholder="Category (example: serie-a)"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">No Offer</option>
+          <option value="799">799</option>
+          <option value="849">849</option>
+        </select>
+        <select
+          value={sport}
+          onChange={(e) => setSport(e.target.value)}
           style={input}
-        />
+        >
+          <option value="football">Football</option>
+          <option value="cricket">Cricket</option>
+        </select>
 
         <input
           placeholder="League"
@@ -416,26 +431,31 @@ export default function UploadJersey() {
           style={input}
         />
 
-        <input
-          placeholder="Season (example: 2024)"
+        <select
           value={season}
           onChange={(e) => setSeason(e.target.value)}
           style={input}
-        />
+        >
+          <option value="25/26">25/26</option>
+        </select>
 
-        <input
-          placeholder="Version (fan/player)"
+        <select
           value={version}
           onChange={(e) => setVersion(e.target.value)}
           style={input}
-        />
-
-        <input
-          placeholder="Sleeve (short/long)"
+        >
+          <option value="fan">Fan</option>
+          <option value="retro">Retro</option>
+          <option value="player">Player</option>
+        </select>
+        <select
           value={sleeve}
           onChange={(e) => setSleeve(e.target.value)}
           style={input}
-        />
+        >
+          <option value="half">Half</option>
+          <option value="long">Long</option>
+        </select>
 
         <input
           type="file"

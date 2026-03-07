@@ -57,3 +57,12 @@
   align-items: center;
   margin-bottom: 20px;
 }
+
+.low-stock-row {
+  background: #fff5f5;
+}
+
+.low-stock-row td {
+  color: #c1121f;
+  font-weight: 600;
+}
