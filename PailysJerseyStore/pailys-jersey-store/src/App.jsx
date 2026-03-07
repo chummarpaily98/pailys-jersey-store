@@ -377,19 +377,37 @@ function App() {
                   className="jersey-card"
                   onClick={() => setSelectedJersey(jersey)} // 👈 opens Quick View modal
                 >
-                  <img
-                    src={jersey.images?.[0]}
-                    alt={jersey.name}
-                    className="jersey-image"
-                  />
+                  <div className="image-container">
+
+                    <img
+                      src={jersey.images?.[0]}
+                      alt={jersey.name}
+                      className="jersey-image"
+                    />
+
+                    {jersey.offerPrice && (
+                      <div className="discount-badge">
+                        -{Math.round(((jersey.price - jersey.offerPrice) / jersey.price) * 100)}%
+                      </div>
+                    )}
+
+                  </div>
                   <div className="jersey-info">
                     <h3 className="jersey-name">{jersey.name}</h3>
-                    <p className="price">₹{jersey.price}</p>
+                    <p className="price">
+                      {jersey.offerPrice ? (
+                        <>
+                          <span className="offer-price">₹{jersey.offerPrice.toFixed(2)}</span>
+                          <span className="original-price">₹{jersey.price.toFixed(2)}</span>
+                        </>
+                      ) : (
+                        <span className="normal-price">₹{jersey.price.toFixed(2)}</span>
+                      )}
+                    </p>
                     <p className="sizes">
                       Sizes: {
-                        Object.entries(jersey.sizes || {})
-                          .filter(([size, qty]) => qty > 0)
-                          .map(([size]) => size)
+                        ["S", "M", "L", "XL", "XXL"]
+                          .filter(size => (jersey.sizes?.[size] || 0) > 0)
                           .join(", ") || "Out of stock"
                       }
                     </p>
@@ -624,7 +642,7 @@ function App() {
             onClick={(e) => e.stopPropagation()} // prevents closing when clicking inside
           >
             <img
-              src={selectedJersey.imageUrl}
+              src={selectedJersey.images?.[0]}
               alt={selectedJersey.name}
               className="modal-image"
             />

@@ -7,6 +7,7 @@ import App from "./App.jsx";
 import UploadJersey from "./components/UploadJersey.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import UpdateStock from "./components/UpdateStock";
 
 import "./output.css";
 
@@ -21,6 +22,14 @@ root.render(
 
         {/* Admin login route */}
         <Route path="/admin-login" element={<AdminLogin />} />
+        <Route
+          path="/admin-update-stock"
+          element={
+            <ProtectedRoute>
+              <UpdateStock />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Protected admin upload page */}
         <Route

@@ -200,11 +200,13 @@ body {
 
 /* ====== INFO SECTION ====== */
 .jersey-info {
-  padding: 10px;
+  padding: 12px 10px 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  /* center everything */
   text-align: center;
+  gap: 3px;
 }
 
 /* ====== TEXT ====== */
@@ -323,14 +325,18 @@ body {
 
   .jersey-name {
     font-size: 0.85rem;
-    font-weight: 500;
-    margin: 3px 0;
+    font-weight: 400;
     color: #111;
   }
 
+
   .price {
+    display: flex;
+    justify-content: flex-start;
+    align-items: left;
+    gap: 1px;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #111;
     margin: 2px 0;
   }
@@ -616,4 +622,49 @@ body {
 
 .load-more-btn:hover {
   opacity: 0.8;
+}
+
+.image-container {
+  position: relative;
+}
+
+.discount-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: black;
+  color: white;
+  padding: 3px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.offer-price {
+  color: #d62828;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #9a9a9a;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.normal-price {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #111;
 }

@@ -1,0 +1,59 @@
+.stock-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px;
+}
+
+.stock-search {
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  text-align: center;
+}
+
+.jersey-name-cell {
+  text-align: left;
+  font-weight: 600;
+}
+
+.stock-btn {
+  background: #154E39;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.stock-btn:hover {
+  opacity: 0.8;
+}
+
+.stock-number {
+  font-weight: 600;
+}
+
+.total-stock {
+  font-weight: bold;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}

@@ -18,6 +18,7 @@ export default function UploadJersey() {
   /* ---------------- SINGLE UPLOAD STATES ---------------- */
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [offerPrice, setOfferPrice] = useState("");
   const [image, setImage] = useState(null);
   const [category, setCategory] = useState("");
   const [league, setLeague] = useState("");
@@ -94,7 +95,7 @@ export default function UploadJersey() {
         await addDoc(collection(db, "jerseys"), {
           name,
           price: Number(price),
-
+          offerPrice: offerPrice ? Number(offerPrice) : null,
           category,
           league,
           team,
@@ -117,6 +118,7 @@ export default function UploadJersey() {
         setSingleMessage("Uploaded successfully!");
         setName("");
         setPrice("");
+        setOfferPrice("");
         setStock("");
         setImage(null);
         setSingleProgress(0);
@@ -238,7 +240,7 @@ export default function UploadJersey() {
       await addDoc(collection(db, "jerseys"), {
         name: row.name || row.Name,
         price: Number(row.price || row.Price || 0),
-
+        offerPrice: row.offerPrice ? Number(row.offerPrice) : null,
         category: row.category || row.Category || "",
         league: row.league || row.League || "",
         team: row.team || row.Team || "",
@@ -383,6 +385,14 @@ export default function UploadJersey() {
           onChange={(e) => setPrice(e.target.value)}
           style={input}
           required
+        />
+
+        <input
+          placeholder="Offer Price (optional)"
+          type="number"
+          value={offerPrice}
+          onChange={(e) => setOfferPrice(e.target.value)}
+          style={input}
         />
 
         <input
